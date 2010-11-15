@@ -1,0 +1,25 @@
+#!/usr/bin/ruby
+
+# conman -r /my/recipes/folder /path/to/a1.sendhub.net.rb
+
+$:.unshift(File.join File.dirname(__FILE__), '..', 'lib')
+#require 'rubygems'
+require 'conman'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: conman [-r /my/recipes/folder] /path/to/script.rb"
+  opts.on("-r", "--recipes RECIPES_FOLDER", "Recipes folder") do |r|
+    puts r
+    options[:recipes] = r
+  end
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+end.parse!
+
+options[:script] = ARGV.last
+
+Conman.init(:recipes => options[:recipes])
+Conman.run(:script => options[:script])
