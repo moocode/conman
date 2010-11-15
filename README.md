@@ -5,8 +5,10 @@ __This is still under active development and is subject to change__
 
 Conman is a simple server configuration management library.  The core concepts are around:
 
-_Ingredients_ - reusable, sharable components that achieve specific tasks
-_Recipes_ - your private recipes that make use of the Ingredients
+* _Ingredients_ - reusable, sharable components that achieve specific tasks
+* _Recipes_ - your public or private recipes that make use of the Ingredients
+
+Ingredients should ensure that they are idempotent.  Public Recipes may include setting up a LAMP system for example.
 
 Installation
 ------------
@@ -22,7 +24,8 @@ Creating your first Ingredient
 ------------------------------
 
 An ingredient is a simple Ruby Class whose name ends with Ingredient and (optionally) subclasses Ingredient.
-The Ingredient superclass just provides some helper methods if you wish to use them.
+The Ingredient superclass just provides some helper methods if you wish to use them.  Because they are just Ruby classes
+they can be tested using any test framework you like.  See our ingredients repository for some examples.
 
     class FileIngredient < Ingredient
       def create(options={})
@@ -37,9 +40,43 @@ The Ingredient superclass just provides some helper methods if you wish to use t
 Your first Recipe
 -----------------
 
-	class MyServer < Recipe
+	class MyRecipe < Recipe
 		file :create, :path => '/tmp/foo.txt'
 	end
+
+Running your Recipe
+-------------------
+
+conman ships with a binary for running your recipes.  It takes a path to a folder of ingredients and a recipe file:
+
+	conman -i /path/to/ingredients /path/to/recipes/my_recipe.rb
+
+Alternatively you can run them from a script (handy for testing)
+
+	Conman.init :ingredients => '/path/to/ingredients/'
+	Conman.run '/path/to/recipes/my_recipe.rb'
+
+Testing
+-------
+
+Here's an example of a TestUnit test for an ingredient:
+
+	require 'test/unit'
+	require 'rubygems'
+	require 'mocha'
+	require 'conman'
+
+	class FileIngredientTest < Test::Unit::TestCase
+	  def setup
+	    @@conman ||= Conman.init(:ingredients => '/path/to/ingredients/file.rb')
+	    @file = FileIngredient.new
+	  end
+
+	  def test_create
+	    FileIngredient.any_instance.expects(:shell).returns('touch /tmp/moo.txt')
+	    @file.create :path => '/tmp/moo.txt'
+	  end
+    end
 
 Preparing a live server
 -----------------------
