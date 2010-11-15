@@ -1,24 +1,25 @@
+require 'conman/ingredient'
 require 'conman/recipe'
 
 class Conman
   def self.init(options)
-    recipe_folder = options[:recipes]
+    ingredients_folder = options[:ingredients]
     
-    puts "initializing with recipes folder: #{recipe_folder}"
+    puts "initializing with ingredients folder: #{ingredients_folder}"
     
-    abort "You must specify a recipe" if recipe_folder.nil? or recipe_folder.empty?
+    abort "You must specify an ingredient" if ingredients_folder.nil? or ingredients_folder.empty?
     
-    recipes = []
+    ingredients = []
     
-    Dir.glob(recipe_folder + '*').each do |f|
-      recipes << "#{File.join f, File.basename(f)}.rb" if File.directory? f
-      recipes << f unless File.directory? f
+    Dir.glob(ingredients_folder + '*').each do |f|
+      ingredients << "#{File.join f, File.basename(f)}.rb" if File.directory? f
+      ingredients << f unless File.directory? f
     end
     
     #puts "Loading recipes: #{recipes.inspect}"
-    puts "Loading #{recipes.size} recipe(s)"
+    puts "Loading #{ingredients.size} ingredient(s)"
     
-    recipes.each {|recipe| load recipe}
+    ingredients.each {|ingredient| load ingredient}
   end
   
   def self.run(options)

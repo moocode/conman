@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = %q{moomerman@gmail.com}
   s.files = ["LICENSE", "README.md","lib/conman.rb"] + Dir.glob('lib/conman/*.rb')
   s.has_rdoc = false
-  s.homepage = %q{http://github.com/moomerman/conman}
+  s.homepage = %q{http://github.com/moocode/conman}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{conman}

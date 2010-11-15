@@ -3,20 +3,28 @@ conman - Server Configuration Management
 
 __This is still under active development and is subject to change__
 
+Conman is a simple server configuration management library.  The core concepts are around:
+
+_Ingredients_ - reusable, sharable components that achieve specific tasks
+_Recipes_ - your private recipes that make use of the Ingredients
+
 Installation
 ------------
 
 gem install conman
 
-Recipes
--------
+Ingredient Repository
+---------------------
 
-Our recipe library can be found at: [github.com/moocode/recipes](http://github.com/moocode/recipes)
+Our ingredient library can be found at: [github.com/moocode/ingredients](http://github.com/moocode/ingredients)
 
-Creating your first Recipe
---------------------------
+Creating your first Ingredient
+------------------------------
 
-    class FileRecipe < Recipe
+An ingredient is a simple Ruby Class whose name ends with Ingredient and (optionally) subclasses Ingredient.
+The Ingredient superclass just provides some helper methods if you wish to use them.
+
+    class FileIngredient < Ingredient
       def create(options={})
     	`touch #{options[:path]}` unless exists? :path => options[:path]
       end
@@ -26,22 +34,15 @@ Creating your first Recipe
 	  end
 	end
 
-Your first server definition
-----------------------------
+Your first Recipe
+-----------------
 
 	class MyServer < Recipe
-		file :create :path => '/tmp/foo.txt'
+		file :create, :path => '/tmp/foo.txt'
 	end
 
-Why another chef/puppet/...?
-----------------------------
-
-* More ruby-like
-* Simple to understand
-* Designed for smaller scale systems
-
-On a live server
-----------------
+Preparing a live server
+-----------------------
 
 First you need to install all the pre-requisites (ruby, rubygems, conman, git-core)
 
