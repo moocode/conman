@@ -73,7 +73,7 @@ Here's an example of a TestUnit test for an ingredient:
 	  end
 
 	  def test_create
-	    FileIngredient.any_instance.expects(:shell).returns('touch /tmp/moo.txt')
+	    FileIngredient.any_instance.expects(:create).returns('touch /tmp/moo.txt')
 	    @file.create :path => '/tmp/moo.txt'
 	  end
     end
